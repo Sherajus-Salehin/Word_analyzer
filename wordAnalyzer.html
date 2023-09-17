@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Word Analyzer</title>
+</head>
+<body>
+    <h1>Word Analysis Tool</h1>
+    <p>Enter a paragraph:</p>
+    <textarea id="inputParagraph" rows="5" cols="50"></textarea>
+    <br>
+    <button onclick="analyzeWords()">Analyze Words</button>
+
+    <h2>Words in the Paragraph and Their Count (Sorted by Count):</h2>
+    <p>Total Word Count: <span id="totalWordCount">0</span></p>
+    <table border="1" id="wordTable">
+        <!-- Table will be dynamically populated here -->
+    </table>
+
+    
+
+    <script>
+        function analyzeWords() {
+            const paragraph = document.getElementById('inputParagraph').value;
+            const words = paragraph.split(/\s+/);
+            const wordCounts = {};
+            
+            words.forEach(word => {
+                const cleanedWord = word.trim().toLowerCase();
+                if (cleanedWord !== '') {
+                    wordCounts[cleanedWord] = (wordCounts[cleanedWord] || 0) + 1;
+                }
+            });
+
+            const wordArray = Object.keys(wordCounts).map(word => ({
+                word: word,
+                count: wordCounts[word]
+            }));
+
+            wordArray.sort((a, b) => b.count - a.count);
+
+            const wordTable = document.getElementById('wordTable');
+            wordTable.innerHTML = '';
+
+            const headerRow = wordTable.insertRow(0);
+            headerRow.innerHTML = '<th>Word</th><th>Count</th>';
+
+            wordArray.forEach((wordData, index) => {
+                const row = wordTable.insertRow(index + 1);
+                row.innerHTML = `<td>${wordData.word}</td><td>${wordData.count}</td>`;
+            });
+
+            // Display total word count
+            const totalWordCount = document.getElementById('totalWordCount');
+            totalWordCount.textContent = words.length;
+        }
+    </script>
+</body>
+</html>
